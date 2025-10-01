@@ -2,10 +2,8 @@ const API_URL = "https://u05restfulapi.onrender.com/api/v1/todos";
 
 console.log("jQuery körs");
 
-// jQuery ready function
 $(document).ready(function() {
   
-  // Cache jQuery selectors
   const $form = $("#todo-form");
   const $todoList = $("#todo-list");
   const $titleInput = $("#todo-title");
@@ -14,7 +12,6 @@ $(document).ready(function() {
   const $completedInput = $("#todo-completed");
   const $filterButtons = $(".filters button");
 
-  // Fetch todos with optional filter
   function fetchTodos(filter) {
     let url = API_URL;
     if (filter === "true" || filter === "false") {
@@ -32,7 +29,6 @@ $(document).ready(function() {
       $.each(data, function(index, todo) {
         const $li = $("<li>");
         
-        // Create checkbox
         const $checkbox = $("<input>", {
           type: "checkbox",
           checked: todo.completed
@@ -53,7 +49,6 @@ $(document).ready(function() {
           });
         });
         
-        // Create text div
         const $textDiv = $("<div>");
         const $titleSpan = $("<strong>").text(todo.title);
         const $descSpan = $("<span>").text(todo.description ? ` - ${todo.description}` : "");
@@ -64,7 +59,6 @@ $(document).ready(function() {
           $textDiv.append($dateSpan);
         }
         
-        // Create edit button
         const $editBtn = $("<button>", {
           text: "Ändra",
           class: "edit"
@@ -74,7 +68,6 @@ $(document).ready(function() {
           editTodo(todo);
         });
         
-        // Create delete button
         const $delBtn = $("<button>", {
           text: "Ta bort"
         });
@@ -83,7 +76,6 @@ $(document).ready(function() {
           deleteTodo(todo._id);
         });
         
-        // Append all elements to list item
         $li.append($checkbox).append($textDiv).append($editBtn).append($delBtn);
         $todoList.append($li);
       });
@@ -93,7 +85,6 @@ $(document).ready(function() {
     });
   }
 
-  // Form submit handler
   $form.on("submit", function(e) {
     e.preventDefault();
     
@@ -121,7 +112,6 @@ $(document).ready(function() {
     });
   });
 
-  // Delete todo function
   function deleteTodo(id) {
     $.ajax({
       url: `${API_URL}/${id}`,
@@ -135,7 +125,6 @@ $(document).ready(function() {
     });
   }
 
-  // Edit todo function
   function editTodo(todo) {
     const newTitle = prompt("Titel:", todo.title) || todo.title;
     const newDesc = prompt("Beskrivning:", todo.description || "") || todo.description;
@@ -160,14 +149,12 @@ $(document).ready(function() {
     });
   }
 
-  // Filter button handlers
   $filterButtons.each(function() {
     $(this).on("click", function() {
       fetchTodos($(this).data("filter"));
     });
   });
 
-  // Initial fetch
   fetchTodos("all");
   
 });
